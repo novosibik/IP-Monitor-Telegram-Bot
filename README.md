@@ -45,7 +45,7 @@ ip-monitor/
 ## 🚀 Быстрый старт
 
 ```bash
-git clone https://github.com/<your-org>/ip-monitor.git
+git clone https://github.com/novosibik/ip-monitor.git
 cd ip-monitor
 
 # 1) Укажите Telegram BOT TOKEN (от @BotFather) в config.json
