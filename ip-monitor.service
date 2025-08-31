@@ -1,0 +1,15 @@
+[Unit]
+Description=IP Monitor (Telegram)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=%i
+WorkingDirectory=/home/%i/ip-monitor
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/usr/bin/python3 /home/%i/ip-monitor/monitor.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
