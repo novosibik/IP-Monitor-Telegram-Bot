@@ -271,9 +271,9 @@ PR приветствуются!
 MIT (пример):
 
 ```
-MIT License
+License
 
-Copyright (c) <year> <you>
+Copyright (c) 2025 Novosibik
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 ...
