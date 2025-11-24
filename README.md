@@ -1,10 +1,4 @@
- (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
-diff --git a/README.md b/README.md
-index 54fd3d2104002be9863984628444a6b1f98b3b0b..2a4e29931d8d50637f080360ef1fae67419e1a7b 100644
---- a/README.md
-+++ b/README.md
-@@ -1,82 +1,85 @@
- # IP Monitor Telegram Bot
+# IP Monitor Telegram Bot
  
  Монитор доступности IP/хостов с уведомлениями в Telegram, отчётами (CSV/PNG/PDF), ролями и правами доступа, интерактивными мастерами, персональными расписаниями и часовыми поясами пользователей, а также Prometheus-метриками.
  
@@ -91,6 +85,3 @@ index 54fd3d2104002be9863984628444a6b1f98b3b0b..2a4e29931d8d50637f080360ef1fae67
      {
        "chat_id": "123456789",
        "role": "admin",
- 
-EOF
-)
