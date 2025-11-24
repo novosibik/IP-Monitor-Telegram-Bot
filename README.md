@@ -56,7 +56,8 @@ sudo ./install_monitor.sh
 ```
 
 Скрипт установки ориентирован на Ubuntu 24.04/25.10: он ставит системные зависимости (python3-venv, iputils-ping, шрифты для matplotlib),
-разворачивает виртуальное окружение в `~/ip-monitor` и регистрирует `systemd` unit `ip-monitor@<user>.service`.
+разворачивает виртуальное окружение в `~/ip-monitor` и регистрирует `systemd` unit `ip-monitor@<user>.service`. Повторный запуск не перетирает
+`config.json`/`targets.csv`, отчёты и логи — можно обновлять скрипты без риска потерять данные.
 
 Проверка:
 
