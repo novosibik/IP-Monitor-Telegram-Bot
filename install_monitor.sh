@@ -28,8 +28,23 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y \
   iputils-ping cron tzdata rsync \
   fonts-dejavu-core libcairo2-dev libfreetype6-dev pkg-config
 
-# Копируем файлы в домашнюю директорию пользователя
-rsync -a --delete --exclude '.git' "$REPO_DIR"/ "$APP_DIR"/
+# Копируем файлы в домашнюю директорию пользователя, не затирая конфиги/логи при переустановке
+RSYNC_EXCLUDES=(
+  --exclude '.git'
+  --exclude 'reports/'
+  --exclude 'ip_monitor_log.csv'
+  --exclude 'ip_monitor.prom'
+)
+rsync -a "${RSYNC_EXCLUDES[@]}" "$REPO_DIR"/ "$APP_DIR"/
+
+# Создаём дефолтные конфиги только при первом запуске
+for cfg in config.json targets.csv; do
+  if [[ ! -f "$APP_DIR/$cfg" ]]; then
+    cp "$REPO_DIR/$cfg" "$APP_DIR/$cfg"
+  fi
+done
+
+mkdir -p "$APP_DIR/reports"
 chown -R "$APP_USER":"$APP_USER" "$APP_DIR"
 
 # Настраиваем виртуальное окружение
