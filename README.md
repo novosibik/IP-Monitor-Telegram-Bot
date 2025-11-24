@@ -98,8 +98,57 @@ crontab -l         # увидите блок между "# BEGIN ip-monitor repo
 ```json
 {
   "telegram_token": "PUT_YOUR_BOT_TOKEN_HERE",
-
   "recipients": [
     {
       "chat_id": "123456789",
       "role": "admin",
+      "resources": "*",
+      "timezone": "Europe/Moscow",
+      "reports": {
+        "daily":   { "enabled": true,  "hour": 9,  "minute": 0 },
+        "weekly":  { "enabled": true,  "hour": 10, "minute": 0, "dow": 1 },
+        "monthly": { "enabled": false, "hour": 9,  "minute": 30, "day": 1 }
+      }
+    }
+  ],
+  "check_interval": 30,
+  "log_csv": "ip_monitor_log.csv",
+  "reports_dir": "reports",
+  "warn_threshold": 1,
+  "fail_threshold": 3,
+  "success_threshold": 2,
+  "sla_target_percent": 99.9,
+  "timezone": "UTC",
+  "working_hours": { "enabled": false, "start": "09:00", "end": "21:00" },
+  "prom_metrics_path": "ip_monitor.prom",
+  "session_timeout_minutes": 15
+}
+```
+
+**Пояснения:**
+
+* `recipients` — список пользователей. `resources` может быть `"*"` (доступ ко всем целям) или массивом имен/IP из `targets.csv`.
+* Периоды отчётов: `daily`/`weekly`/`monthly`. Для weekly укажите номер дня недели (`dow`, 1=понедельник), для monthly — номер дня месяца (`day`).
+* Пороги `warn_threshold`/`fail_threshold`/`success_threshold` управляют анти-флаппером, `check_interval` — период ICMP-проверок.
+* Пути `log_csv`, `reports_dir`, `prom_metrics_path` можно переопределить, если хотите писать в другое место.
+* `working_hours.enabled=true` включает фильтр по рабочему времени (используется в отчётах).
+* `session_timeout_minutes` ограничивает время неактивности в интерактивных мастерах Telegram-бота.
+
+### `targets.csv`
+
+Формат CSV с разделителем `;`:
+
+```
+IP;Name;SLA_Target
+8.8.8.8;Google DNS;99.9
+1.1.1.1;Cloudflare DNS;99.9
+```
+
+Поле `SLA_Target` используется только для расчётов в отчётах и подсветки нарушений SLA.
+
+### Служба и cron
+
+* systemd-unit устанавливается как `ip-monitor@<user>.service` и запускает `monitor.py` из виртуального окружения в `~/ip-monitor/.venv`.
+* Команда `/rebuildcron` (для роли admin) пересобирает cron-задания для отчетов на основе блоков `reports` в `config.json`.
+* Логи пингов (`ip_monitor_log.csv`) и метрики Prometheus (`ip_monitor.prom`) лежат в каталоге бота; отчёты складываются в `reports/`.
+
