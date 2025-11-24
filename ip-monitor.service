@@ -1,27 +1,16 @@
- (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
-diff --git a/ip-monitor.service b/ip-monitor.service
-index a2ddd58bedc1e8bc8ab95b8910fc01ad972fdf87..4a5088d7016afd29e7df87f72cd98ce53307f69d 100644
---- a/ip-monitor.service
-+++ b/ip-monitor.service
-@@ -1,15 +1,16 @@
- [Unit]
- Description=IP Monitor (Telegram)
- After=network-online.target
- Wants=network-online.target
- 
- [Service]
- User=%i
--WorkingDirectory=/home/%i/ip-monitor
-+WorkingDirectory=%h/ip-monitor
- Environment=PYTHONUNBUFFERED=1
--ExecStart=/usr/bin/python3 /home/%i/ip-monitor/monitor.py
-+Environment="PATH=%h/ip-monitor/.venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin"
-+ExecStart=%h/ip-monitor/.venv/bin/python %h/ip-monitor/monitor.py
- Restart=always
- RestartSec=5
- 
- [Install]
- WantedBy=multi-user.target
- 
-EOF
-)
+[Unit]
+Description=IP Monitor (Telegram)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=%i
+WorkingDirectory=%h/ip-monitor
+Environment=PYTHONUNBUFFERED=1
+Environment="PATH=%h/ip-monitor/.venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin"
+ExecStart=%h/ip-monitor/.venv/bin/python %h/ip-monitor/monitor.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
